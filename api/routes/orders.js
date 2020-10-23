@@ -7,6 +7,7 @@ const Product=require('../models/product');
 router.get('/',(req,res,next)=>{
     Order.find()
     .select('productId quantity _id')
+    .populate('productId')//this line is optional  is se respective product id ka bhi sara data show ho jayega orders me
     .exec()
     .then(docs=>{
         res.status(200).json({
