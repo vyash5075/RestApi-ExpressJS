@@ -1,10 +1,12 @@
 const express=require('express');
 const app  =express();
 const morgan=require('morgan');
+const path = require('path');
 const mongoose=require('mongoose');
 const productRoutes=require('./api/routes/products');
 const ordersroutes=require('./api/routes/orders');
 const bodyParser=require('body-parser');
+const userRoutes=require('./api/routes/user');
 mongoose.connect('mongodb+srv://admin:admin@node-rest-shop.4vu0t.mongodb.net/productshop?retryWrites=true&w=majority',{
     
     useMongoClient: true,
@@ -27,7 +29,8 @@ app.use((req,res,next)=>{
 
 app.use('/orders',ordersroutes);
 app.use('/products',productRoutes);
-
+app.use('/user',userRoutes);
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 
 app.use((req,res,next)=>{
     const error=new Error('not found');
@@ -36,7 +39,7 @@ app.use((req,res,next)=>{
 
 })
 app.use((error,req,res,next)=>{
-    res.status(err.status || 500);
+    res.status(error.status || 500);
     res.json({
         error:{
             message:error.message
