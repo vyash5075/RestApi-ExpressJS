@@ -56,6 +56,23 @@ router.post('/signup',(req,res,next)=>{
     
 
 })
+router.post('/login',(req,res,next)=>{
+    User.find({email:req.body.email})
+    .exec()
+    .then(user=>{
+        if(user<1){
+           return  res.status(404).json({
+                message:'login failed'
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
+})
 
 
 router.delete('/:userId',(req,res)=>{
