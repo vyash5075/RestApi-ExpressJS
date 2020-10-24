@@ -57,14 +57,34 @@ router.post('/signup',(req,res,next)=>{
 
 })
 router.post('/login',(req,res,next)=>{
-    User.find({email:req.body.email})
+   
+  var password = req.body.password
+  console.log(password);
+    User.findOne({email:req.body.email})
     .exec()
     .then(user=>{
-        if(user<1){
-           return  res.status(404).json({
-                message:'login failed'
-            })
+        if(user.length==0){
+           return  res.status(401).json({
+                message:'user not exist'
+            });
         }
+        else {
+            bcrypt.compare(password, user.password,(err,result) => {
+                if(err){
+                    return  res.status(401).json({
+                        message:'Auth failed'
+                    });  
+                }
+                if(result){
+                    return res.status(200).json({
+                        message:'Auth successful'
+                    })
+                }
+                res.status(401).json({
+                    message:'Auth failed'
+                });
+            });
+          }  
     })
     .catch(err => {
         console.log(err);

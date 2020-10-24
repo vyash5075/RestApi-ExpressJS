@@ -5,7 +5,7 @@ const router=express.Router();
 const Product=require('../models/product');
 const storage=multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'./uploads/');       //location
+        cb(null,'uploads/');       //location
     },
     filename:function(req,file,cb){
         cb(null,new Date().toISOString()+file.originalname);    //filename
@@ -13,6 +13,7 @@ const storage=multer.diskStorage({
 });
 
 const upload = multer({ dest:'./uploads'});
+//const upload=multer({storage:storage})
 //https://medium.com/@pprathameshmore/uploading-files-using-multer-on-server-in-nodejs-and-expressjs-5f4e621ccc67
 const fileFilter = (req, file, cb) => {
     if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
